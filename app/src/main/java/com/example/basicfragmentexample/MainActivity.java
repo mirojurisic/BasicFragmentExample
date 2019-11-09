@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -26,19 +27,16 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
-
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                counter++;
-                if (counter%2==0)
-                        //   fragmentTransaction.add(R.id.main_frame,  new MyFragment2()).commit();
-                        fragmentTransaction. replace( R.id.main_frame,new MyFragment3(), "FRAGMENT3").commit();
-
-                    else
-                        fragmentTransaction.replace(R.id.main_frame,  new MyFragment2(),"FRAGMENT2").commit();
-
-
-                    Toast.makeText(getApplicationContext(), "Activity's Button", Toast.LENGTH_LONG).show();
-
+                Fragment f = fragmentManager.findFragmentByTag("FRAGMENT2");
+                if (f  != null && f .isVisible()) {
+                    fragmentTransaction. replace( R.id.main_frame,new MyFragment3(), "FRAGMENT3").addToBackStack("FRAGMENT3").commit();
+                    Toast.makeText(getApplicationContext(), "FRAGMENT3", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    fragmentTransaction.replace(R.id.main_frame, new MyFragment2(), "FRAGMENT2").addToBackStack("FRAGMENT3").commit();
+                    Toast.makeText(getApplicationContext(), "FRAGMENT2", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
